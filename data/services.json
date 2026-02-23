@@ -1,0 +1,159 @@
+{
+  "services": [
+    {
+      "id": "web-app-pentest",
+      "icon": "🌐",
+      "title": "Web Application Penetration Testing",
+      "description": "I hunt for logic flaws and vulnerabilities that automated tools miss. From the OWASP Top 10 to complex API business logic, I ensure your web apps are resilient against modern attacks.",
+      "color": "cyber-blue",
+      "keyFocus": ["Broken Access Control", "SQLi", "XSS", "SSRF"],
+      "fullDetails": {
+        "overview": "I hunt for logic flaws and vulnerabilities that automated tools miss. From the OWASP Top 10 to complex API business logic, I ensure your web apps are resilient against modern attacks.",
+        "whatYouGet": [
+          "Manual testing beyond automated scanners",
+          "API endpoint enumeration & business logic testing",
+          "Authentication & session management review",
+          "Detailed PoC for every finding",
+          "Executive summary + developer remediation guide"
+        ],
+        "ideal": "Startups securing their MVP, SaaS platforms, e-commerce apps, and enterprises needing compliance checks.",
+        "frameworks": ["OWASP Top 10", "PTES", "WSTG"]
+      }
+    },
+    {
+      "id": "active-directory-pentest",
+      "icon": "🏢",
+      "title": "On-Prem Active Directory Pentesting",
+      "description": "The \"keys to the kingdom\" often reside in AD. I simulate an internal breach to see how far an attacker can pivot, escalate privileges, and achieve domain dominance.",
+      "color": "cyber-orange",
+      "keyFocus": ["Kerberoasting", "BloodHound analysis", "GPO misconfigurations"],
+      "fullDetails": {
+        "overview": "The \"keys to the kingdom\" often reside in AD. I simulate an internal breach to see how far an attacker can pivot, escalate privileges, and achieve full domain dominance — just like a real threat actor would.",
+        "whatYouGet": [
+          "Full attack path mapping with BloodHound",
+          "Privilege escalation chain documentation",
+          "GPO and ACL misconfiguration review",
+          "Domain persistence technique identification",
+          "Remediation roadmap prioritized by impact"
+        ],
+        "ideal": "Enterprises with on-premises infrastructure, hybrid environments, and organizations preparing for internal threat simulations.",
+        "frameworks": ["MITRE ATT&CK", "PTES", "BloodHound CE"]
+      }
+    },
+    {
+      "id": "azure-pentest",
+      "icon": "☁️",
+      "title": "Azure Pentesting & Audit Checks",
+      "description": "Cloud environments are often breached through identity and configuration errors. I perform deep audits of your Azure tenant and subscription security posture.",
+      "color": "cyber-blue",
+      "keyFocus": ["Entra ID (Azure AD) security", "Key Vault exposures", "Storage Account leaks"],
+      "fullDetails": {
+        "overview": "Cloud environments are often breached through identity and configuration errors. I perform deep audits of your Azure tenant, subscriptions, and resource configurations to surface every exploitable gap.",
+        "whatYouGet": [
+          "Entra ID (Azure AD) permission & role review",
+          "Storage Account and Key Vault exposure check",
+          "Service Principal and Managed Identity abuse paths",
+          "Network security group and firewall rule analysis",
+          "CIS Azure Benchmark compliance mapping"
+        ],
+        "ideal": "Businesses running workloads on Azure, SaaS companies with Azure backends, and organizations after cloud migrations.",
+        "frameworks": ["CIS Azure Benchmark", "MITRE ATT&CK for Cloud", "Microsoft Secure Score"]
+      }
+    },
+    {
+      "id": "mobile-app-pentest",
+      "icon": "📱",
+      "title": "Mobile Application Pentesting (iOS & Android)",
+      "description": "Mobile apps face unique threats like insecure data storage and weak binary protections. I perform both static and dynamic analysis to keep your mobile users safe.",
+      "color": "cyber-orange",
+      "keyFocus": ["Reverse engineering", "SSL pinning bypass", "Local data leakage"],
+      "fullDetails": {
+        "overview": "Mobile apps face unique threats like insecure data storage, hardcoded secrets, and weak binary protections. I perform both static and dynamic analysis on iOS and Android apps to keep your users safe.",
+        "whatYouGet": [
+          "APK/IPA static analysis & reverse engineering",
+          "Dynamic runtime analysis with instrumentation",
+          "SSL pinning bypass & traffic interception",
+          "Local storage and keychain security review",
+          "Backend API testing from mobile context"
+        ],
+        "ideal": "Fintech apps, health apps, and any mobile product handling sensitive user data or financial transactions.",
+        "frameworks": ["OWASP MASVS", "OWASP MSTG", "Frida & Objection"]
+      }
+    },
+    {
+      "id": "source-code-analysis",
+      "icon": "🛡️",
+      "title": "Source Code Analysis (SAST)",
+      "description": "I review your codebase line-by-line to find security flaws at the root. This \"White Box\" approach is the most effective way to eliminate vulnerabilities during the SDLC.",
+      "color": "cyber-blue",
+      "keyFocus": ["Hardcoded secrets", "Insecure functions", "Logic errors"],
+      "fullDetails": {
+        "overview": "I review your codebase line-by-line to find security flaws at the root. This \"White Box\" approach is the most effective and cost-efficient way to eliminate vulnerabilities early in the SDLC.",
+        "whatYouGet": [
+          "Manual code review beyond automated SAST tools",
+          "Hardcoded credentials and secret detection",
+          "Insecure cryptographic implementation review",
+          "Business logic flaw identification",
+          "CI/CD pipeline security recommendations"
+        ],
+        "ideal": "Development teams pre-launch, companies after a security incident, and engineering teams adopting a DevSecOps culture.",
+        "frameworks": ["OWASP Code Review Guide", "CWE/SANS Top 25", "NIST SSDF"]
+      }
+    },
+    {
+      "id": "hardware-pentest",
+      "icon": "📟",
+      "title": "Hardware Pentesting",
+      "description": "Security doesn't end at the software layer. I assess physical devices, IoT hardware, and embedded systems to ensure they can't be compromised via physical access or side-channel attacks.",
+      "color": "cyber-orange",
+      "keyFocus": ["UART/JTAG debugging", "Firmware extraction", "Intercepting bus communication"],
+      "fullDetails": {
+        "overview": "Security doesn't end at the software layer. I assess physical devices, IoT hardware, and embedded systems to ensure they can't be compromised via physical access, debug interfaces, or side-channel attacks.",
+        "whatYouGet": [
+          "UART, JTAG, and SPI/I2C interface analysis",
+          "Firmware extraction and reverse engineering",
+          "Hardcoded credential and key extraction",
+          "Physical tamper resistance assessment",
+          "Secure boot and update mechanism review"
+        ],
+        "ideal": "IoT product companies, smart device manufacturers, industrial control system operators, and hardware startups pre-launch.",
+        "frameworks": ["OWASP IoT Top 10", "IEC 62443", "ETSI EN 303 645"]
+      }
+    }
+  ],
+  "methodology": [
+    {
+      "step": "01",
+      "title": "Scoping",
+      "description": "Defining boundaries to ensure zero business disruption.",
+      "icon": "check"
+    },
+    {
+      "step": "02",
+      "title": "Reconnaissance",
+      "description": "Gathering intelligence on the target.",
+      "icon": "search"
+    },
+    {
+      "step": "03",
+      "title": "Exploitation",
+      "description": "Safely demonstrating the impact of a vulnerability.",
+      "icon": "shield"
+    },
+    {
+      "step": "04",
+      "title": "Reporting",
+      "description": "Providing a detailed, prioritized roadmap for remediation.",
+      "icon": "document"
+    }
+  ],
+  "whyWorkWithMe": {
+    "title": "Why Work With Me?",
+    "description": "You receive a comprehensive report that speaks both to developers (with technical PoCs) and stakeholders (with executive risk summaries).",
+    "stats": [
+      { "label": "Technical PoCs", "value": "100%" },
+      { "label": "Executive Summaries", "value": "Clear" },
+      { "label": "Follow-up Support", "value": "Included" }
+    ]
+  }
+}

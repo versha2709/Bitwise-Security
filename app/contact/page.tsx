@@ -1,7 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import CyberBackground from '@/components/CyberBackground'
+import { CyberBackground } from '@/components/common'
+import contactData from '@/data/contact.json'
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -29,7 +30,7 @@ Message:
 ${formData.message}
     `
     
-    const mailtoLink = `mailto:info@bitwise-security.nl?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+    const mailtoLink = `mailto:${contactData.contactInfo.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
     
     // Open email client
     window.location.href = mailtoLink
@@ -131,13 +132,9 @@ ${formData.message}
                   className="w-full px-4 py-3 bg-cyber-dark border border-cyber-blue/30 rounded-lg text-white focus:border-cyber-blue focus:outline-none focus:ring-2 focus:ring-cyber-blue/50 transition-all"
                 >
                   <option value="">Select a service</option>
-                  <option value="Web Application Pentesting">Web Application Pentesting</option>
-                  <option value="Active Directory Pentesting">Active Directory Pentesting</option>
-                  <option value="Azure Security Audit">Azure Security Audit</option>
-                  <option value="Mobile App Pentesting">Mobile App Pentesting</option>
-                  <option value="Source Code Analysis">Source Code Analysis</option>
-                  <option value="Hardware Pentesting">Hardware Pentesting</option>
-                  <option value="Other">Other</option>
+                  {contactData.serviceOptions.map((service, index) => (
+                    <option key={index} value={service}>{service}</option>
+                  ))}
                 </select>
               </div>
 
@@ -186,43 +183,25 @@ ${formData.message}
               <h2 className="text-3xl font-bold text-cyber-orange mb-6">Contact Information</h2>
               
               <div className="space-y-6">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-cyber-orange/20 border border-cyber-orange rounded-lg flex items-center justify-center flex-shrink-0">
-                    <svg className="w-6 h-6 text-cyber-orange" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8l8 5 8-5v10zm-8-7L4 6h16l-8 5z"/>
-                    </svg>
+                {contactData.contactMethods.map((method, index) => (
+                  <div key={index} className="flex items-start gap-4">
+                    <div className="w-12 h-12 bg-cyber-orange/20 border border-cyber-orange rounded-lg flex items-center justify-center flex-shrink-0">
+                      <svg className="w-6 h-6 text-cyber-orange" fill="currentColor" viewBox="0 0 24 24">
+                        <path d={method.svgPath}/>
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 className="text-white font-semibold mb-1">{method.title}</h3>
+                      {method.link ? (
+                        <a href={method.link} className="text-cyber-orange hover:text-orange-400 transition-colors">
+                          {method.value}
+                        </a>
+                      ) : (
+                        <p className="text-gray-400">{method.value}</p>
+                      )}
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="text-white font-semibold mb-1">Email</h3>
-                    <a href="mailto:info@bitwise-security.nl" className="text-cyber-orange hover:text-orange-400 transition-colors">
-                      info@bitwise-security.nl
-                    </a>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-cyber-orange/20 border border-cyber-orange rounded-lg flex items-center justify-center flex-shrink-0">
-                    <svg className="w-6 h-6 text-cyber-orange" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="text-white font-semibold mb-1">Location</h3>
-                    <p className="text-gray-400">Netherlands</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-cyber-orange/20 border border-cyber-orange rounded-lg flex items-center justify-center flex-shrink-0">
-                    <svg className="w-6 h-6 text-cyber-orange" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="text-white font-semibold mb-1">Response Time</h3>
-                    <p className="text-gray-400">Within 24 hours</p>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
 
@@ -230,7 +209,7 @@ ${formData.message}
             <div className="bg-cyber-darkBlue/80 backdrop-blur-md border border-cyber-blue/30 rounded-2xl p-8 box-glow">
               <h3 className="text-2xl font-bold text-cyber-blue mb-6">Certifications</h3>
               <div className="grid grid-cols-3 gap-4">
-                {['OSCP', 'OSWE', 'OSEP'].map((cert, index) => (
+                {contactData.certifications.map((cert, index) => (
                   <div key={index} className="bg-cyber-dark/50 border border-cyber-blue/30 rounded-lg p-4 text-center">
                     <div className="text-2xl font-bold text-cyber-blue">{cert}</div>
                   </div>
@@ -240,10 +219,9 @@ ${formData.message}
 
             {/* Working Hours Card */}
             <div className="bg-gradient-to-br from-cyber-darkBlue to-cyber-dark border border-cyber-blue/30 rounded-2xl p-8 box-glow">
-              <h3 className="text-2xl font-bold text-cyber-blue mb-4">Availability</h3>
+              <h3 className="text-2xl font-bold text-cyber-blue mb-4">{contactData.availability.title}</h3>
               <p className="text-gray-300">
-                Available for security assessments and consultations. 
-                Projects are scheduled based on scope and complexity.
+                {contactData.availability.description}
               </p>
             </div>
           </div>

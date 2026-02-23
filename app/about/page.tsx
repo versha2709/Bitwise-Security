@@ -1,6 +1,6 @@
 "use client";
 
-import CyberBackground from "@/components/CyberBackground";
+import { CyberBackground } from "@/components/common";
 import Image from "next/image";
 
 export default function About() {

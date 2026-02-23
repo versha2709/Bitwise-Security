@@ -1,0 +1,80 @@
+{
+  "contactInfo": {
+    "email": "info@bitwise-security.nl",
+    "location": "Netherlands",
+    "responseTime": "Within 24 hours"
+  },
+  "certifications": ["OSCP", "OSWE", "OSEP"],
+  "availability": {
+    "title": "Availability",
+    "description": "Available for security assessments and consultations. Projects are scheduled based on scope and complexity."
+  },
+  "serviceOptions": [
+    "Web Application Pentesting",
+    "Active Directory Pentesting",
+    "Azure Security Audit",
+    "Mobile App Pentesting",
+    "Source Code Analysis",
+    "Hardware Pentesting",
+    "Other"
+  ],
+  "formFields": [
+    {
+      "id": "name",
+      "label": "Full Name",
+      "type": "text",
+      "required": true,
+      "placeholder": "John Doe"
+    },
+    {
+      "id": "email",
+      "label": "Email Address",
+      "type": "email",
+      "required": true,
+      "placeholder": "john@company.com"
+    },
+    {
+      "id": "company",
+      "label": "Company Name",
+      "type": "text",
+      "required": false,
+      "placeholder": "Your Company"
+    },
+    {
+      "id": "service",
+      "label": "Service Interested In",
+      "type": "select",
+      "required": true,
+      "placeholder": "Select a service"
+    },
+    {
+      "id": "message",
+      "label": "Message",
+      "type": "textarea",
+      "required": true,
+      "placeholder": "Tell us about your security needs...",
+      "rows": 5
+    }
+  ],
+  "contactMethods": [
+    {
+      "icon": "email",
+      "title": "Email",
+      "value": "info@bitwise-security.nl",
+      "link": "mailto:info@bitwise-security.nl",
+      "svgPath": "M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8l8 5 8-5v10zm-8-7L4 6h16l-8 5z"
+    },
+    {
+      "icon": "location",
+      "title": "Location",
+      "value": "Netherlands",
+      "svgPath": "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"
+    },
+    {
+      "icon": "response",
+      "title": "Response Time",
+      "value": "Within 24 hours",
+      "svgPath": "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+    }
+  ]
+}
