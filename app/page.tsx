@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import ParticleCanvas from "@/components/homepage/ParticleCanvas";
 import FireCanvas from "@/components/homepage/FireCanvas";
-import GlobalStyles from "@/components/common/GlobalStyles";
 import homepageData from "@/data/homepage.json";
 import SidebarIcons from "@/components/homepage/SidebarIcons";
 import BarChart from "@/components/homepage/BarChart";
@@ -40,8 +39,6 @@ export default function Home() {
         fontFamily: "'Rajdhani','Orbitron',sans-serif",
       }}
     >
-      <GlobalStyles />
-
       <ParticleCanvas />
 
       <div
