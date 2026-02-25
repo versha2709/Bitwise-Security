@@ -26,6 +26,73 @@ export default function HexGrid() {
   const [hovered, setHovered] = useState(null);
   const [scanY, setScanY] = useState(-VB_H);
 
+  // ── ADDED: live vals state ──
+  const [vals, setVals] = useState<number[]>(
+    HEXES.map((h) => {
+      const n = parseInt(String(h.val), 10);
+      return isNaN(n) ? 100 : n;
+    }),
+  );
+
+  useEffect(() => {
+    const timers = HEXES.map((_, i) => {
+      const t = setTimeout(
+        () => {
+          const iv = setInterval(
+            () => {
+              setVals((prev) => {
+                const next = [...prev];
+                next[i] = Math.max(
+                  50,
+                  Math.min(
+                    999,
+                    next[i] + Math.round((Math.random() - 0.48) * 25),
+                  ),
+                );
+                return next;
+              });
+            },
+            1500 + Math.random() * 1000,
+          );
+          return iv;
+        },
+        i * 300 + Math.random() * 400,
+      );
+      return t;
+    });
+    return () => timers.forEach(clearTimeout);
+  }, []);
+  // ── END ADDED ──
+
+  // ── ADDED: floating effect via direct DOM manipulation to avoid CSS animation conflict ──
+  const floatRefs = useState<(SVGGElement | null)[]>(() =>
+    HEXES.map(() => null),
+  )[0];
+  const floatRefsArr = floatRefs as (SVGGElement | null)[];
+  const setFloatRef = (i: number) => (el: SVGGElement | null) => {
+    floatRefsArr[i] = el;
+  };
+
+  useEffect(() => {
+    let rafId: number;
+    const phases = HEXES.map((_, i) => (i * Math.PI * 0.72) % (Math.PI * 2));
+    const durations = HEXES.map((_, i) => 3.2 + i * 0.18);
+    const animate = (ts: number) => {
+      HEXES.forEach((_, i) => {
+        const el = floatRefsArr[i];
+        if (el) {
+          const y =
+            Math.sin((ts / 1000 / durations[i]) * Math.PI * 2 + phases[i]) * 6;
+          el.setAttribute("transform", `translate(0, ${y})`);
+        }
+      });
+      rafId = requestAnimationFrame(animate);
+    };
+    rafId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(rafId);
+  }, []);
+  // ── END ADDED ──
+
   useEffect(() => {
     let start: any = null;
     let rafId: any;
@@ -106,80 +173,82 @@ export default function HexGrid() {
         {HEXES.map((h, i: any) => {
           const isHov = hovered === i;
           return (
-            <g
-              key={i}
-              style={{
-                cursor: "pointer",
-                animation: `hexPop 0.5s ${0.06 * i + 0.55}s both cubic-bezier(0.34,1.56,0.64,1)`,
-                transition: "filter 0.2s",
-              }}
-              onMouseEnter={() => setHovered(i)}
-              onMouseLeave={() => setHovered(null)}
-            >
-              {isHov && (
+            // ── ADDED: outer <g> for float, inner <g> is original untouched ──
+            <g key={i} ref={setFloatRef(i)}>
+              <g
+                style={{
+                  cursor: "pointer",
+                  animation: `hexPop 0.5s ${0.06 * i + 0.55}s both cubic-bezier(0.34,1.56,0.64,1)`,
+                  transition: "filter 0.2s",
+                }}
+                onMouseEnter={() => setHovered(i)}
+                onMouseLeave={() => setHovered(null)}
+              >
+                {isHov && (
+                  <polygon
+                    points={hexPts(h.cx, h.cy, RD * 1.08)}
+                    fill="none"
+                    stroke="#ffcc66"
+                    strokeWidth="4"
+                    opacity="0.55"
+                    filter="url(#hgfHov)"
+                    style={{
+                      animation:
+                        "hexHoverPulse 0.8s ease-in-out infinite alternate",
+                    }}
+                  />
+                )}
                 <polygon
-                  points={hexPts(h.cx, h.cy, RD * 1.08)}
+                  points={hexPts(h.cx, h.cy, RD)}
+                  fill={isHov ? "url(#hfgHov)" : "url(#hfg)"}
+                  style={{ transition: "fill 0.2s" }}
+                />
+                <polygon
+                  points={hexPts(h.cx, h.cy, RD)}
+                  fill="none"
+                  stroke={isHov ? "#ffcc44" : "#ff9922"}
+                  strokeWidth={isHov ? "3.2" : "2.3"}
+                  filter={isHov ? "url(#hgfHov)" : "url(#hgf)"}
+                  style={{ transition: "all 0.2s" }}
+                />
+                <polygon
+                  points={hexPts(h.cx, h.cy, RD * 0.845)}
                   fill="none"
                   stroke="#ffcc66"
-                  strokeWidth="4"
-                  opacity="0.55"
-                  filter="url(#hgfHov)"
-                  style={{
-                    animation:
-                      "hexHoverPulse 0.8s ease-in-out infinite alternate",
-                  }}
+                  strokeWidth="0.9"
+                  opacity={isHov ? "0.7" : "0.42"}
                 />
-              )}
-              <polygon
-                points={hexPts(h.cx, h.cy, RD)}
-                fill={isHov ? "url(#hfgHov)" : "url(#hfg)"}
-                style={{ transition: "fill 0.2s" }}
-              />
-              <polygon
-                points={hexPts(h.cx, h.cy, RD)}
-                fill="none"
-                stroke={isHov ? "#ffcc44" : "#ff9922"}
-                strokeWidth={isHov ? "3.2" : "2.3"}
-                filter={isHov ? "url(#hgfHov)" : "url(#hgf)"}
-                style={{ transition: "all 0.2s" }}
-              />
-              <polygon
-                points={hexPts(h.cx, h.cy, RD * 0.845)}
-                fill="none"
-                stroke="#ffcc66"
-                strokeWidth="0.9"
-                opacity={isHov ? "0.7" : "0.42"}
-              />
-              {[0, 1, 2].map((j) => {
-                const a1 = Math.PI / 2 - j * (Math.PI / 3);
-                const ir = RD * 0.82;
-                return (
-                  <line
-                    key={j}
-                    x1={h.cx + ir * Math.cos(a1)}
-                    y1={h.cy - ir * Math.sin(a1)}
-                    x2={h.cx - ir * Math.cos(a1)}
-                    y2={h.cy + ir * Math.sin(a1)}
-                    stroke="#ff9900"
-                    strokeWidth="0.6"
-                    opacity={isHov ? "0.38" : "0.22"}
-                  />
-                );
-              })}
-              <text
-                x={h.cx}
-                y={h.cy + 7}
-                textAnchor="middle"
-                fill={isHov ? "#ffffff" : "#fff5e4"}
-                fontSize={isHov ? "18" : "17"}
-                fontWeight="700"
-                fontFamily="'Orbitron','Courier New',monospace"
-                letterSpacing="1.2"
-                filter="url(#textGlow)"
-                style={{ transition: "all 0.2s" }}
-              >
-                {h.val}
-              </text>
+                {[0, 1, 2].map((j) => {
+                  const a1 = Math.PI / 2 - j * (Math.PI / 3);
+                  const ir = RD * 0.82;
+                  return (
+                    <line
+                      key={j}
+                      x1={h.cx + ir * Math.cos(a1)}
+                      y1={h.cy - ir * Math.sin(a1)}
+                      x2={h.cx - ir * Math.cos(a1)}
+                      y2={h.cy + ir * Math.sin(a1)}
+                      stroke="#ff9900"
+                      strokeWidth="0.6"
+                      opacity={isHov ? "0.38" : "0.22"}
+                    />
+                  );
+                })}
+                <text
+                  x={h.cx}
+                  y={h.cy + 7}
+                  textAnchor="middle"
+                  fill={isHov ? "#ffffff" : "#fff5e4"}
+                  fontSize={isHov ? "18" : "17"}
+                  fontWeight="700"
+                  fontFamily="'Orbitron','Courier New',monospace"
+                  letterSpacing="1.2"
+                  filter="url(#textGlow)"
+                  style={{ transition: "all 0.2s" }}
+                >
+                  {vals[i]}
+                </text>
+              </g>
             </g>
           );
         })}
