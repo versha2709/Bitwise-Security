@@ -15,6 +15,7 @@ export default function SidebarIcons() {
         flexDirection: "column",
         gap: 14,
       }}
+      className="sidebar-icons"
     >
       {icons.map((iconData, i) => (
         <div

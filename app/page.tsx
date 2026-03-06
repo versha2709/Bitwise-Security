@@ -47,8 +47,8 @@ export default function Home() {
           left: "50%",
           top: "44%",
           transform: "translate(-50%,-50%)",
-          width: 470,
-          height: 470,
+          width: "min(470px, 80vw)",
+          height: "min(470px, 80vw)",
           borderRadius: "50%",
           border: "1px solid rgba(0,140,255,0.10)",
           boxShadow:
@@ -67,15 +67,16 @@ export default function Home() {
           zIndex: 10,
           minHeight: "100vh",
           display: "grid",
-          gridTemplateColumns: "260px 1fr 360px",
+          gridTemplateColumns: "1fr",
           gap: 0,
-          padding: "56px 14px 0 70px",
+          padding: "80px 16px 0",
           alignItems: "center",
           maxWidth: 1420,
           margin: "0 auto",
         }}
+        className="homepage-grid"
       >
-        <div>
+        <div className="homepage-left">
           <ThreatStream />
           <StatsCards />
         </div>
@@ -87,14 +88,15 @@ export default function Home() {
             alignItems: "center",
             justifyContent: "center",
             position: "relative",
-            minHeight: 600,
+            minHeight: 400,
           }}
+          className="homepage-center"
         >
           <div
             style={{
               position: "absolute",
-              width: 490,
-              height: 530,
+              width: "min(490px, 90vw)",
+              height: "min(530px, 90vw)",
               background:
                 "radial-gradient(ellipse,rgba(0,80,200,.17) 0%,transparent 70%)",
               borderRadius: "50%",
@@ -108,8 +110,8 @@ export default function Home() {
               position: "relative",
               marginTop: -58,
               zIndex: 14,
-              width: 220,
-              height: 140,
+              width: "min(220px, 50vw)",
+              height: "min(140px, 30vw)",
             }}
           >
             <FireCanvas cx={110} cy={105} />
@@ -123,12 +125,13 @@ export default function Home() {
           style={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "flex-start",
-            paddingLeft: 20,
+            justifyContent: "center",
+            paddingLeft: 8,
             paddingRight: 8,
             position: "relative",
-            minHeight: 600,
+            minHeight: 400,
           }}
+          className="homepage-right"
         >
           <HexGrid />
         </div>
@@ -137,20 +140,23 @@ export default function Home() {
       <div
         style={{
           position: "fixed",
-          bottom: "4%",
+          bottom: "calc(15% + 10px)",
           left: "50%",
           transform: "translateX(-50%)",
           zIndex: 20,
-          whiteSpace: "nowrap",
+          padding: "0 16px",
+          textAlign: "center",
+          maxWidth: "90vw",
         }}
       >
         <span
           style={{
             fontFamily: "'Orbitron',monospace",
-            fontSize: 10,
-            letterSpacing: 4,
+            fontSize: "clamp(7px, 1.8vw, 10px)",
+            letterSpacing: "clamp(1px, 0.8vw, 4px)",
             color: "rgba(80,160,255,.52)",
             textTransform: "uppercase",
+            display: "inline-block",
           }}
         >
           {homepageData.footer.text}

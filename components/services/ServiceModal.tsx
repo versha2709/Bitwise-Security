@@ -39,7 +39,7 @@ export default function ServiceModal({
       </div>
 
       <div
-        className={`relative w-full max-w-2xl bg-[#0a0f1a] border ${borderClass} rounded-2xl overflow-hidden shadow-2xl`}
+        className={`relative w-full max-w-2xl bg-[#0a0f1a] border ${borderClass} rounded-2xl overflow-hidden shadow-2xl max-h-[90vh] flex flex-col`}
         style={{ boxShadow: `0 0 60px ${accent}22, 0 0 120px ${accent}11` }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -52,14 +52,14 @@ export default function ServiceModal({
         />
 
         {/* Header */}
-        <div className={`p-8 border-b ${borderClass} flex items-start gap-5`}>
+        <div className={`p-4 sm:p-8 border-b ${borderClass} flex items-start gap-3 sm:gap-5`}>
           <div
-            className={`text-5xl p-4 rounded-xl ${bgAccentClass} border ${borderClass} flex-shrink-0`}
+            className={`text-3xl sm:text-5xl p-3 sm:p-4 rounded-xl ${bgAccentClass} border ${borderClass} flex-shrink-0`}
             style={{ boxShadow: `0 0 20px ${accent}33` }}
           >
             {service.icon}
           </div>
-          <div className="flex-1">
+          <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1">
               <div
                 className={`w-2 h-2 rounded-full ${dotClass} animate-pulse`}
@@ -70,7 +70,7 @@ export default function ServiceModal({
                 Active Service
               </span>
             </div>
-            <h2 className={`text-2xl font-bold text-white leading-tight`}>
+            <h2 className={`text-lg sm:text-2xl font-bold text-white leading-tight`}>
               {service.title}
             </h2>
           </div>
@@ -83,10 +83,10 @@ export default function ServiceModal({
         </div>
 
         {/* Body */}
-        <div className="p-8 space-y-7 max-h-[60vh] overflow-y-auto">
+        <div className="p-4 sm:p-8 space-y-5 sm:space-y-7 overflow-y-auto flex-1">
           {/* Overview */}
           <div>
-            <p className="text-gray-300 leading-relaxed">
+            <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
               {service.fullDetails.overview}
             </p>
           </div>
@@ -101,7 +101,7 @@ export default function ServiceModal({
               {service.keyFocus.map((f, i) => (
                 <span
                   key={i}
-                  className={`px-3 py-1 rounded-full text-sm font-mono border ${borderClass} ${bgAccentClass} ${accentClass}`}
+                  className={`px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-mono border ${borderClass} ${bgAccentClass} ${accentClass}`}
                 >
                   {f}
                 </span>
@@ -114,7 +114,7 @@ export default function ServiceModal({
             <h3
               className={`text-xs font-mono uppercase tracking-widest ${accentClass} mb-3`}
             >
-              {/* What You Receive */} What You Receive
+              What You Receive
             </h3>
             <ul className="space-y-2">
               {service.fullDetails.whatYouGet.map((item, i) => (
@@ -135,12 +135,12 @@ export default function ServiceModal({
 
           {/* Ideal for */}
           <div
-            className={`rounded-xl p-4 ${bgAccentClass} border ${borderClass}`}
+            className={`rounded-xl p-3 sm:p-4 ${bgAccentClass} border ${borderClass}`}
           >
             <h3
               className={`text-xs font-mono uppercase tracking-widest ${accentClass} mb-2`}
             >
-              {/* Ideal For */} Ideal For
+              Ideal For
             </h3>
             <p className="text-gray-300 text-sm leading-relaxed">
               {service.fullDetails.ideal}
@@ -152,13 +152,13 @@ export default function ServiceModal({
             <h3
               className={`text-xs font-mono uppercase tracking-widest ${accentClass} mb-3`}
             >
-              {/* Frameworks & Standards */} Frameworks & Standards
+              Frameworks & Standards
             </h3>
             <div className="flex flex-wrap gap-2">
               {service.fullDetails.frameworks.map((fw, i) => (
                 <span
                   key={i}
-                  className="px-3 py-1 text-xs font-mono bg-white/5 border border-white/10 rounded text-gray-400"
+                  className="px-2 sm:px-3 py-1 text-xs font-mono bg-white/5 border border-white/10 rounded text-gray-400"
                 >
                   {fw}
                 </span>
@@ -168,10 +168,10 @@ export default function ServiceModal({
         </div>
 
         {/* Footer */}
-        <div className={`p-6 border-t ${borderClass} flex gap-3`}>
+        <div className={`p-4 sm:p-6 border-t ${borderClass} flex flex-col sm:flex-row gap-3`}>
           <a
             href="/contact"
-            className="flex-1 text-center py-3 rounded-lg font-semibold text-sm transition-all duration-300 hover:scale-105"
+            className="flex-1 text-center py-3 rounded-lg font-semibold text-xs sm:text-sm transition-all duration-300 hover:scale-105"
             style={{
               background: `linear-gradient(135deg, ${accent}cc, ${accent}88)`,
               color: "#fff",
@@ -182,7 +182,7 @@ export default function ServiceModal({
           </a>
           <button
             onClick={onClose}
-            className="px-6 py-3 rounded-lg font-semibold text-sm border border-white/10 text-gray-400 hover:text-white hover:border-white/30 transition-all duration-300"
+            className="px-6 py-3 rounded-lg font-semibold text-xs sm:text-sm border border-white/10 text-gray-400 hover:text-white hover:border-white/30 transition-all duration-300"
           >
             CLOSE
           </button>
