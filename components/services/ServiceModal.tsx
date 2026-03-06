@@ -91,12 +91,11 @@ export default function ServiceModal({
             </p>
           </div>
 
-          {/* Key Focus */}
           <div>
             <h3
               className={`text-xs font-mono uppercase tracking-widest ${accentClass} mb-3`}
             >
-              // Key Focus Areas
+              Key Focus Areas
             </h3>
             <div className="flex flex-wrap gap-2">
               {service.keyFocus.map((f, i) => (
@@ -115,7 +114,7 @@ export default function ServiceModal({
             <h3
               className={`text-xs font-mono uppercase tracking-widest ${accentClass} mb-3`}
             >
-              // What You Receive
+              {/* What You Receive */} What You Receive
             </h3>
             <ul className="space-y-2">
               {service.fullDetails.whatYouGet.map((item, i) => (
@@ -141,7 +140,7 @@ export default function ServiceModal({
             <h3
               className={`text-xs font-mono uppercase tracking-widest ${accentClass} mb-2`}
             >
-              // Ideal For
+              {/* Ideal For */} Ideal For
             </h3>
             <p className="text-gray-300 text-sm leading-relaxed">
               {service.fullDetails.ideal}
@@ -153,7 +152,7 @@ export default function ServiceModal({
             <h3
               className={`text-xs font-mono uppercase tracking-widest ${accentClass} mb-3`}
             >
-              // Frameworks & Standards
+              {/* Frameworks & Standards */} Frameworks & Standards
             </h3>
             <div className="flex flex-wrap gap-2">
               {service.fullDetails.frameworks.map((fw, i) => (

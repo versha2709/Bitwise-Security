@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 
@@ -38,9 +39,11 @@ export default function Navigation() {
           <Link href="/" className="flex items-center group">
             <div className="relative">
               <div className="w-12 h-12 rounded-lg transform group-hover:rotate-6 transition-transform duration-300 box-glow overflow-hidden">
-                <img
+                <Image
                   src="/logo.png"
                   alt="Bitwise Security"
+                  width={48}
+                  height={48}
                   className="w-full h-full object-cover"
                 />
               </div>

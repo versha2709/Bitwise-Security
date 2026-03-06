@@ -9,10 +9,9 @@ export default function About() {
       <CyberBackground />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
-        {/* Header */}
         <div className="text-center mb-16">
           <h1 className="text-5xl font-bold mb-4">
-            <span className="text-white">// THE CORE</span>{" "}
+            <span className="text-white">THE CORE</span>{" "}
             <span className="text-cyber-blue text-glow">PROTOCOL</span>
           </h1>
           <div className="h-1 w-32 bg-gradient-to-r from-cyber-blue to-cyber-orange mx-auto"></div>
@@ -30,7 +29,6 @@ export default function About() {
               <div className="relative bg-cyber-darkBlue border-2 border-cyber-blue/50 rounded-2xl p-4 box-glow">
                 <div className="w-full aspect-square rounded-xl overflow-hidden bg-gradient-to-br from-cyber-dark to-cyber-darkBlue flex items-center justify-center">
                   {/* Placeholder for profile image */}
-
                   <div className="w-full h-full bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center">
                     {/* <svg
                       className="w-32 h-32 text-cyber-blue opacity-50"
@@ -39,9 +37,11 @@ export default function About() {
                     >
                       <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
                     </svg> */}
-                    <img
+                    <Image
                       src="/profile.jpg"
                       alt="Profile"
+                      width={400}
+                      height={400}
                       className="w-full h-full object-cover rounded-xl"
                     />
                   </div>
@@ -67,13 +67,13 @@ export default function About() {
 
               <p className="text-gray-300 leading-relaxed mb-6 text-lg">
                 I have always been driven by a deep-seated curiosity about how
-                systems work and how they are built. For me, hacking isn't just
-                a career—it's a lifelong passion. I am constantly diving into
-                the latest software, refining my methodology, and studying new
-                ways to improve security. This relentless drive to learn ensures
-                that when I test your environment, I am bringing the most
-                up-to-date knowledge and a creative problem-solving approach to
-                every project.
+                systems work and how they are built. For me, hacking isn&apos;t
+                just a career&mdash;it&apos;s a lifelong passion. I am
+                constantly diving into the latest software, refining my
+                methodology, and studying new ways to improve security. This
+                relentless drive to learn ensures that when I test your
+                environment, I am bringing the most up-to-date knowledge and a
+                creative problem-solving approach to every project.
               </p>
 
               <div className="grid md:grid-cols-2 gap-6 mt-8">
@@ -152,10 +152,10 @@ export default function About() {
               of the curve. I hold industry-recognized certifications (OSCP,
               OSWE, and OSEP) and have a proven track record of uncovering
               critical vulnerabilities in complex environments. When you hire
-              me, you aren't just getting a scan—you're getting a dedicated
-              security partner. Every engagement concludes with a comprehensive
-              debriefing session to ensure your team fully understands the
-              findings and the necessary steps for remediation.
+              me, you aren&apos;t just getting a scan&mdash;you&apos;re getting
+              a dedicated security partner. Every engagement concludes with a
+              comprehensive debriefing session to ensure your team fully
+              understands the findings and the necessary steps for remediation.
             </p>
           </div>
         </div>
@@ -166,13 +166,14 @@ export default function About() {
             My Approach
           </h2>
           <p className="text-gray-300 leading-relaxed mb-6">
-            Security is not a 'one-size-fits-all' solution. I follow a
+            Security is not a &apos;one-size-fits-all&apos; solution. I follow a
             structured, ethical methodology beginning with deep reconnaissance
             and moving through vulnerability analysis to exploitation and
             reporting. I utilize the industry-standard OWASP and PTES frameworks
-            to ensure thoroughness. My goal is not just to find 'bugs,' but to
-            provide a clear roadmap for your development team to strengthen your
-            overall security posture without disrupting your daily operations.
+            to ensure thoroughness. My goal is not just to find
+            &apos;bugs,&apos; but to provide a clear roadmap for your
+            development team to strengthen your overall security posture without
+            disrupting your daily operations.
           </p>
 
           <div className="grid md:grid-cols-4 gap-4">
