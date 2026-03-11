@@ -216,8 +216,8 @@ export default function Contact() {
 
               {status === "sent" && (
                 <p className="text-center text-green-400 text-sm">
-                  Your email client will open. Please send the message to
-                  complete the process.
+                  Thank you for reaching out! We will get back to you as soon as
+                  possible.
                 </p>
               )}
             </form>
