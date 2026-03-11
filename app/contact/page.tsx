@@ -19,24 +19,14 @@ export default function Contact() {
     setStatus("sending");
 
     try {
-      const res = await fetch(
-        "https://formsubmit.co/ajax/info@bitwise-security.nl",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({
-            name: formData.name,
-            email: formData.email,
-            company: formData.company,
-            service: formData.service,
-            message: formData.message,
-            _subject: `Security Inquiry from ${formData.name}`,
-          }),
-        },
-      );
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          access_key: "d49e1c89-ab07-4968-a142-64b986a197f4",
+          ...formData,
+        }),
+      });
 
       const data = await res.json();
       if (data.success) {
