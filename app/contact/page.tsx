@@ -18,34 +18,46 @@ export default function Contact() {
     e.preventDefault();
     setStatus("sending");
 
-    // Create mailto link
-    const subject = `Security Inquiry from ${formData.name}`;
-    const body = `
-Name: ${formData.name}
-Email: ${formData.email}
-Company: ${formData.company}
-Service Interested: ${formData.service}
+    try {
+      const res = await fetch(
+        "https://formsubmit.co/ajax/info@bitwise-security.nl",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            name: formData.name,
+            email: formData.email,
+            company: formData.company,
+            service: formData.service,
+            message: formData.message,
+            _subject: `Security Inquiry from ${formData.name}`,
+          }),
+        },
+      );
 
-Message:
-${formData.message}
-    `;
-
-    const mailtoLink = `mailto:${contactData.contactInfo.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-
-    // Open email client
-    window.location.href = mailtoLink;
-
-    setStatus("sent");
-    setTimeout(() => {
-      setStatus("");
-      setFormData({
-        name: "",
-        email: "",
-        company: "",
-        service: "",
-        message: "",
-      });
-    }, 3000);
+      const data = await res.json();
+      if (data.success) {
+        setStatus("sent");
+        setTimeout(() => {
+          setStatus("");
+          setFormData({
+            name: "",
+            email: "",
+            company: "",
+            service: "",
+            message: "",
+          });
+        }, 3000);
+      } else {
+        setStatus("error");
+      }
+    } catch {
+      setStatus("error");
+      setTimeout(() => setStatus(""), 3000);
+    }
   };
 
   const handleChange = (
