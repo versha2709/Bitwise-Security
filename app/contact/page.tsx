@@ -4,6 +4,8 @@ import { useState } from "react";
 import { CyberBackground } from "@/components/common";
 import contactData from "@/data/contact.json";
 
+type FormField = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
+
 export default function Contact() {
   const [formData, setFormData] = useState({
     name: "",
@@ -13,6 +15,7 @@ export default function Contact() {
     message: "",
   });
   const [status, setStatus] = useState("");
+  const [showPopup, setShowPopup] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,39 +44,113 @@ export default function Contact() {
       const data = await res.json();
       if (data.success) {
         setStatus("sent");
-        setTimeout(() => {
-          setStatus("");
-          setFormData({
-            name: "",
-            email: "",
-            company: "",
-            service: "",
-            message: "",
-          });
-        }, 3000);
+        setShowPopup(true);
+        setFormData({
+          name: "",
+          email: "",
+          company: "",
+          service: "",
+          message: "",
+        });
       } else {
         setStatus("error");
+        setShowPopup(true);
       }
     } catch {
       setStatus("error");
-      setTimeout(() => setStatus(""), 3000);
+      setShowPopup(true);
     }
   };
 
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >,
-  ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+  const handleChange = (e: React.ChangeEvent<FormField>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const closePopup = () => {
+    setShowPopup(false);
+    setStatus("");
   };
 
   return (
     <main className="relative min-h-screen pt-24 pb-16">
       <CyberBackground />
+
+      {/* Popup Modal */}
+      {showPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+          <div
+            className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+            onClick={closePopup}
+          />
+          <div
+            className={`relative z-10 w-full max-w-md rounded-2xl p-8 text-center border shadow-2xl ${
+              status === "sent"
+                ? "bg-cyber-darkBlue border-green-500/50"
+                : "bg-cyber-darkBlue border-red-500/50"
+            }`}
+          >
+            <div
+              className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${
+                status === "sent" ? "bg-green-500/20" : "bg-red-500/20"
+              }`}
+            >
+              {status === "sent" ? (
+                <svg
+                  className="w-8 h-8 text-green-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  className="w-8 h-8 text-red-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              )}
+            </div>
+
+            <h3
+              className={`text-2xl font-bold mb-2 ${status === "sent" ? "text-green-400" : "text-red-400"}`}
+            >
+              {status === "sent" ? "Message Sent!" : "Something Went Wrong"}
+            </h3>
+
+            <p className="text-gray-300 mb-6">
+              {status === "sent"
+                ? "Thank you for reaching out! We will get back to you as soon as possible. 🙌"
+                : "Failed to send your message. Please try again or email us directly at info@bitwise-security.nl"}
+            </p>
+
+            <button
+              onClick={closePopup}
+              className={`px-8 py-3 rounded-lg font-semibold text-white transition-all duration-300 hover:scale-105 ${
+                status === "sent"
+                  ? "bg-green-500 hover:bg-green-600"
+                  : "bg-red-500 hover:bg-red-600"
+              }`}
+            >
+              {status === "sent" ? "Done" : "Try Again"}
+            </button>
+          </div>
+        </div>
+      )}
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         {/* Header */}
@@ -202,35 +279,20 @@ export default function Contact() {
                 className={`w-full py-4 rounded-lg font-semibold text-white transition-all duration-300 ${
                   status === "sending"
                     ? "bg-gray-600 cursor-not-allowed"
-                    : status === "sent"
-                      ? "bg-green-600"
-                      : "bg-gradient-to-r from-cyber-blue to-cyan-500 hover:shadow-lg hover:shadow-cyber-blue/50 hover:scale-105"
+                    : "bg-gradient-to-r from-cyber-blue to-cyan-500 hover:shadow-lg hover:shadow-cyber-blue/50 hover:scale-105"
                 }`}
               >
-                {status === "sending"
-                  ? "SENDING..."
-                  : status === "sent"
-                    ? "MESSAGE SENT!"
-                    : "SEND MESSAGE"}
+                {status === "sending" ? "SENDING..." : "SEND MESSAGE"}
               </button>
-
-              {status === "sent" && (
-                <p className="text-center text-green-400 text-sm">
-                  Thank you for reaching out! We will get back to you as soon as
-                  possible.
-                </p>
-              )}
             </form>
           </div>
 
           {/* Contact Information */}
           <div className="space-y-8">
-            {/* Contact Details Card */}
             <div className="bg-cyber-darkBlue/80 backdrop-blur-md border border-cyber-orange/30 rounded-2xl p-8 box-glow-orange">
               <h2 className="text-3xl font-bold text-cyber-orange mb-6">
                 Contact Information
               </h2>
-
               <div className="space-y-6">
                 {contactData.contactMethods.map((method, index) => (
                   <div key={index} className="flex items-start gap-4">
@@ -263,7 +325,6 @@ export default function Contact() {
               </div>
             </div>
 
-            {/* Certifications Card */}
             <div className="bg-cyber-darkBlue/80 backdrop-blur-md border border-cyber-blue/30 rounded-2xl p-8 box-glow">
               <h3 className="text-2xl font-bold text-cyber-blue mb-6">
                 Certifications
@@ -282,7 +343,6 @@ export default function Contact() {
               </div>
             </div>
 
-            {/* Working Hours Card */}
             <div className="bg-gradient-to-br from-cyber-darkBlue to-cyber-dark border border-cyber-blue/30 rounded-2xl p-8 box-glow">
               <h3 className="text-2xl font-bold text-cyber-blue mb-4">
                 {contactData.availability.title}
