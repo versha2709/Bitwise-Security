@@ -22,40 +22,23 @@ export default function Contact() {
     setStatus("sending");
 
     try {
-      const res = await fetch(
-        "https://formsubmit.co/ajax/info@bitwise-security.nl",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({
-            name: formData.name,
-            email: formData.email,
-            company: formData.company,
-            service: formData.service,
-            message: formData.message,
-            _subject: `Security Inquiry from ${formData.name}`,
-          }),
-        },
-      );
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
 
-      const data = await res.json();
-      if (data.success) {
-        setStatus("sent");
-        setShowPopup(true);
-        setFormData({
-          name: "",
-          email: "",
-          company: "",
-          service: "",
-          message: "",
-        });
-      } else {
-        setStatus("error");
-        setShowPopup(true);
-      }
+      if (!res.ok) throw new Error("Failed");
+
+      setStatus("sent");
+      setShowPopup(true);
+      setFormData({
+        name: "",
+        email: "",
+        company: "",
+        service: "",
+        message: "",
+      });
     } catch {
       setStatus("error");
       setShowPopup(true);
