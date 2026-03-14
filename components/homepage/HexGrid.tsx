@@ -37,8 +37,9 @@ export default function HexGrid() {
     floatRefsArr.current[i] = el;
   };
 
-  // PERF FIX: Merge float + scan into ONE single rAF loop instead of two
+  // Single rAF loop for both float + scan, with mount guard and visibility pause
   useEffect(() => {
+    let startRaf: number;
     let rafId: number;
     let start: number | null = null;
     const dur = 3000;
@@ -47,12 +48,8 @@ export default function HexGrid() {
 
     const animate = (ts: number) => {
       if (!start) start = ts;
-
-      // Scan line
       const elapsed = (ts - start) % dur;
       setScanY(-VB_H + (elapsed / dur) * VB_H * 2.5);
-
-      // Float — direct DOM, no React re-render
       HEXES.forEach((_, i) => {
         const el = floatRefsArr.current[i];
         if (el) {
@@ -61,12 +58,25 @@ export default function HexGrid() {
           el.setAttribute("transform", `translate(0, ${y})`);
         }
       });
-
       rafId = requestAnimationFrame(animate);
     };
 
-    rafId = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(rafId);
+    const onVisibilityChange = () => {
+      if (document.hidden) cancelAnimationFrame(rafId);
+      else rafId = requestAnimationFrame(animate);
+    };
+    document.addEventListener("visibilitychange", onVisibilityChange);
+
+    // Wait one rAF — fixes missing animations on first load (Next.js hydration timing)
+    startRaf = requestAnimationFrame(() => {
+      rafId = requestAnimationFrame(animate);
+    });
+
+    return () => {
+      cancelAnimationFrame(startRaf);
+      cancelAnimationFrame(rafId);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+    };
   }, []);
 
   // PERF FIX: Throttled val updates — 2000ms base instead of 1500+random
