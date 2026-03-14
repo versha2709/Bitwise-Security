@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import homepageData from "@/data/homepage.json";
 
 const R = 63;
 const RD = R * 0.87;
@@ -9,24 +10,20 @@ const RS = R * 1.5;
 const HO = (R * Math.sqrt(3)) / 2;
 const PAD = R + 8;
 
-function hexPts(cx: any, cy: any, r = R) {
+function hexPts(cx: number, cy: number, r = R) {
   return Array.from({ length: 6 }, (_, i) => {
     const a = Math.PI / 2 - i * (Math.PI / 3);
     return `${(cx + r * Math.cos(a)).toFixed(2)},${(cy - r * Math.sin(a)).toFixed(2)}`;
   }).join(" ");
 }
 
-import homepageData from "@/data/homepage.json";
-
 const HEXES = homepageData.hexagons;
 const VB_W = PAD + HO + CS + PAD;
 const VB_H = PAD + RS * 3 + PAD;
 
 export default function HexGrid() {
-  const [hovered, setHovered] = useState(null);
+  const [hovered, setHovered] = useState<number | null>(null);
   const [scanY, setScanY] = useState(-VB_H);
-
-  // ── ADDED: live vals state ──
   const [vals, setVals] = useState<number[]>(
     HEXES.map((h) => {
       const n = parseInt(String(h.val), 10);
@@ -34,77 +31,61 @@ export default function HexGrid() {
     }),
   );
 
-  useEffect(() => {
-    const timers = HEXES.map((_, i) => {
-      const t = setTimeout(
-        () => {
-          const iv = setInterval(
-            () => {
-              setVals((prev) => {
-                const next = [...prev];
-                next[i] = Math.max(
-                  50,
-                  Math.min(
-                    999,
-                    next[i] + Math.round((Math.random() - 0.48) * 25),
-                  ),
-                );
-                return next;
-              });
-            },
-            1500 + Math.random() * 1000,
-          );
-          return iv;
-        },
-        i * 300 + Math.random() * 400,
-      );
-      return t;
-    });
-    return () => timers.forEach(clearTimeout);
-  }, []);
-  // ── END ADDED ──
-
-  // ── ADDED: floating effect via direct DOM manipulation to avoid CSS animation conflict ──
-  const floatRefs = useState<(SVGGElement | null)[]>(() =>
-    HEXES.map(() => null),
-  )[0];
-  const floatRefsArr = floatRefs as (SVGGElement | null)[];
+  // Refs for float animation (avoid React re-renders for float)
+  const floatRefsArr = useRef<(SVGGElement | null)[]>(HEXES.map(() => null));
   const setFloatRef = (i: number) => (el: SVGGElement | null) => {
-    floatRefsArr[i] = el;
+    floatRefsArr.current[i] = el;
   };
 
+  // PERF FIX: Merge float + scan into ONE single rAF loop instead of two
   useEffect(() => {
     let rafId: number;
+    let start: number | null = null;
+    const dur = 3000;
     const phases = HEXES.map((_, i) => (i * Math.PI * 0.72) % (Math.PI * 2));
     const durations = HEXES.map((_, i) => 3.2 + i * 0.18);
+
     const animate = (ts: number) => {
+      if (!start) start = ts;
+
+      // Scan line
+      const elapsed = (ts - start) % dur;
+      setScanY(-VB_H + (elapsed / dur) * VB_H * 2.5);
+
+      // Float — direct DOM, no React re-render
       HEXES.forEach((_, i) => {
-        const el = floatRefsArr[i];
+        const el = floatRefsArr.current[i];
         if (el) {
           const y =
             Math.sin((ts / 1000 / durations[i]) * Math.PI * 2 + phases[i]) * 6;
           el.setAttribute("transform", `translate(0, ${y})`);
         }
       });
+
       rafId = requestAnimationFrame(animate);
     };
+
     rafId = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(rafId);
   }, []);
-  // ── END ADDED ──
 
+  // PERF FIX: Throttled val updates — 2000ms base instead of 1500+random
+  // and use a single interval that batches all updates at once
   useEffect(() => {
-    let start: any = null;
-    let rafId: any;
-    const dur = 3000;
-    const animate = (ts: any) => {
-      if (!start) start = ts;
-      const elapsed = (ts - start) % dur;
-      setScanY(-VB_H + (elapsed / dur) * VB_H * 2.5);
-      rafId = requestAnimationFrame(animate);
-    };
-    rafId = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(rafId);
+    const iv = setInterval(() => {
+      setVals((prev) => {
+        const next = [...prev];
+        // Update all hexes in one setState call instead of N separate intervals
+        HEXES.forEach((_, i) => {
+          next[i] = Math.max(
+            50,
+            Math.min(999, next[i] + Math.round((Math.random() - 0.48) * 25)),
+          );
+        });
+        return next;
+      });
+    }, 2000);
+    return () => clearInterval(iv);
   }, []);
 
   return (
@@ -138,7 +119,6 @@ export default function HexGrid() {
             <feGaussianBlur stdDeviation="5" result="b" />
             <feMerge>
               <feMergeNode in="b" />
-              <feMergeNode in="b" />
               <feMergeNode in="SourceGraphic" />
             </feMerge>
           </filter>
@@ -146,14 +126,12 @@ export default function HexGrid() {
             <feGaussianBlur stdDeviation="9" result="b" />
             <feMerge>
               <feMergeNode in="b" />
-              <feMergeNode in="b" />
               <feMergeNode in="SourceGraphic" />
             </feMerge>
           </filter>
           <filter id="textGlow" x="-40%" y="-40%" width="180%" height="180%">
             <feGaussianBlur stdDeviation="3.5" result="b" />
             <feMerge>
-              <feMergeNode in="b" />
               <feMergeNode in="b" />
               <feMergeNode in="SourceGraphic" />
             </feMerge>
@@ -170,10 +148,9 @@ export default function HexGrid() {
           </linearGradient>
         </defs>
 
-        {HEXES.map((h, i: any) => {
+        {HEXES.map((h, i) => {
           const isHov = hovered === i;
           return (
-            // ── ADDED: outer <g> for float, inner <g> is original untouched ──
             <g key={i} ref={setFloatRef(i)}>
               <g
                 style={{

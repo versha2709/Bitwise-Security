@@ -3,22 +3,30 @@
 import { useEffect, useState } from "react";
 import homepageData from "@/data/homepage.json";
 
+// PERF FIX: Interval was 45ms = ~22 React re-renders/second just for this component.
+// Changed to 150ms (still smooth animation, ~6.7x/sec instead of 22x/sec)
+// PERF FIX: Counter animation completes in ~13.5s at 150ms — added a "done" flag
+// so the interval clears itself once all values reach target (no pointless ticking forever)
+
 export default function StatsCards() {
   const [stats, setStats] = useState(
-    homepageData.stats.map(stat => ({ ...stat, value: 0 }))
+    homepageData.stats.map((stat) => ({ ...stat, value: 0 })),
   );
 
   useEffect(() => {
-    const iv = setInterval(
-      () =>
-        setStats((p) =>
-          p.map((s) => ({
-            ...s,
-            value: Math.min(s.value + Math.floor(s.target / 90), s.target),
-          })),
-        ),
-      45,
-    );
+    const iv = setInterval(() => {
+      setStats((p) => {
+        const next = p.map((s) => ({
+          ...s,
+          value: Math.min(s.value + Math.floor(s.target / 30), s.target),
+        }));
+        // PERF FIX: Clear interval when all counters reach target
+        if (next.every((s) => s.value >= s.target)) {
+          clearInterval(iv);
+        }
+        return next;
+      });
+    }, 150); // was 45ms — reduced by 70%
     return () => clearInterval(iv);
   }, []);
 
