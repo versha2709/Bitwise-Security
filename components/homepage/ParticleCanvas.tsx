@@ -12,7 +12,7 @@ export default function ParticleCanvas() {
 
     const ctx = canvas.getContext("2d", {
       willReadFrequently: false,
-      alpha: false,
+      // alpha: false,
     })!;
 
     const resize = () => {
