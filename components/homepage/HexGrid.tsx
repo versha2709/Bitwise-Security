@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import homepageData from "@/data/homepage.json";
+import { subscribe } from "./AnimationManager";
 
 const R = 63;
 const RD = R * 0.87;
@@ -31,61 +32,43 @@ export default function HexGrid() {
     }),
   );
 
-  // Refs for float animation (avoid React re-renders for float)
   const floatRefsArr = useRef<(SVGGElement | null)[]>(HEXES.map(() => null));
   const setFloatRef = (i: number) => (el: SVGGElement | null) => {
     floatRefsArr.current[i] = el;
   };
+  const startRef = useRef<number | null>(null);
+  const dur = 3000;
+  const phases = useRef(
+    HEXES.map((_, i) => (i * Math.PI * 0.72) % (Math.PI * 2)),
+  );
+  const durations = useRef(HEXES.map((_, i) => 3.2 + i * 0.18));
 
-  // Single rAF loop for both float + scan, with mount guard and visibility pause
   useEffect(() => {
-    let startRaf: number;
-    let rafId: number;
-    let start: number | null = null;
-    const dur = 3000;
-    const phases = HEXES.map((_, i) => (i * Math.PI * 0.72) % (Math.PI * 2));
-    const durations = HEXES.map((_, i) => 3.2 + i * 0.18);
-
-    const animate = (ts: number) => {
-      if (!start) start = ts;
-      const elapsed = (ts - start) % dur;
+    const unsub = subscribe((ts) => {
+      if (!startRef.current) startRef.current = ts;
+      const elapsed = (ts - startRef.current) % dur;
       setScanY(-VB_H + (elapsed / dur) * VB_H * 2.5);
+
       HEXES.forEach((_, i) => {
         const el = floatRefsArr.current[i];
         if (el) {
           const y =
-            Math.sin((ts / 1000 / durations[i]) * Math.PI * 2 + phases[i]) * 6;
+            Math.sin(
+              (ts / 1000 / durations.current[i]) * Math.PI * 2 +
+                phases.current[i],
+            ) * 6;
           el.setAttribute("transform", `translate(0, ${y})`);
         }
       });
-      rafId = requestAnimationFrame(animate);
-    };
-
-    const onVisibilityChange = () => {
-      if (document.hidden) cancelAnimationFrame(rafId);
-      else rafId = requestAnimationFrame(animate);
-    };
-    document.addEventListener("visibilitychange", onVisibilityChange);
-
-    // Wait one rAF — fixes missing animations on first load (Next.js hydration timing)
-    startRaf = requestAnimationFrame(() => {
-      rafId = requestAnimationFrame(animate);
     });
 
-    return () => {
-      cancelAnimationFrame(startRaf);
-      cancelAnimationFrame(rafId);
-      document.removeEventListener("visibilitychange", onVisibilityChange);
-    };
+    return () => unsub();
   }, []);
 
-  // PERF FIX: Throttled val updates — 2000ms base instead of 1500+random
-  // and use a single interval that batches all updates at once
   useEffect(() => {
     const iv = setInterval(() => {
       setVals((prev) => {
         const next = [...prev];
-        // Update all hexes in one setState call instead of N separate intervals
         HEXES.forEach((_, i) => {
           next[i] = Math.max(
             50,
@@ -94,7 +77,7 @@ export default function HexGrid() {
         });
         return next;
       });
-    }, 2000);
+    }, 3000);
     return () => clearInterval(iv);
   }, []);
 

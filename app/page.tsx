@@ -37,6 +37,8 @@ export default function Home() {
         background:
           "radial-gradient(ellipse at 35% 44%, #091830 0%, #050d1e 45%, #020810 100%)",
         fontFamily: "'Rajdhani','Orbitron',sans-serif",
+        contain: "layout style paint", // added
+        isolation: "isolate", // added
       }}
     >
       <ParticleCanvas />

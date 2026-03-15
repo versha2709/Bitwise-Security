@@ -1,4 +1,3 @@
-// Homepage-specific components
 export { default as BarChart } from "./BarChart";
 export { default as FireCanvas } from "./FireCanvas";
 export { default as HexGrid } from "./HexGrid";
@@ -8,3 +7,4 @@ export { default as Shield } from "./Shield";
 export { default as SidebarIcons } from "./SidebarIcons";
 export { default as StatsCards } from "./StatsCards";
 export { default as ThreatStream } from "./ThreatStream";
+export { subscribe, pauseAll, resumeAll } from "./AnimationManager";
